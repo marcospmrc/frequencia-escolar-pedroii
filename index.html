@@ -1,495 +1,236 @@
 <!doctype html>
 <html lang="pt-BR" class="h-full">
- <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Frequência Escolar</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <style>
-    * { font-family: 'DM Sans', sans-serif; }
-    .tab-active { border-bottom: 3px solid #1e40af; color: #1e40af; font-weight: 600; }
-    .fade-in { animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .toast { animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s; }
-    @keyframes slideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
-  </style>
-  <style>body { box-sizing: border-box; }</style>
- <script src="/_sdk/telemetry_sdk.js"></script></head>
- <body class="h-full">
-  <div id="app" class="h-full w-full bg-slate-50 overflow-auto">
-   <!-- Header -->
-   <header class="bg-white border-b border-slate-200 px-4 py-4 shadow-sm">
-    <div class="max-w-5xl mx-auto flex items-center justify-between">
-     <div>
-      <h1 id="app-title" class="text-xl font-bold text-slate-800">Frequência Escolar</h1>
-      <p id="school-name" class="text-sm text-slate-500">Escola Estadual</p>
-     </div>
-     <div class="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-lg">
-      <i data-lucide="users" class="w-4 h-4 text-blue-700"></i> <span id="total-count" class="text-sm font-medium text-blue-700">0 registros</span>
-     </div>
-    </div>
-   </header><!-- Tabs -->
-   <nav class="bg-white border-b border-slate-200 px-4">
-    <div class="max-w-5xl mx-auto flex gap-6">
-     <button onclick="switchTab('register')" id="tab-register" class="py-3 px-1 text-sm tab-active">Registrar Frequência</button> <button onclick="switchTab('students')" id="tab-students" class="py-3 px-1 text-sm text-slate-500 hover:text-slate-700">Alunos</button> <button onclick="switchTab('reports')" id="tab-reports" class="py-3 px-1 text-sm text-slate-500 hover:text-slate-700">Relatórios</button>
-    </div>
-   </nav><!-- Toast -->
-   <div id="toast" class="fixed top-4 right-4 z-50 hidden"></div><!-- Content -->
-   <main class="max-w-5xl mx-auto p-4">
-    <!-- Tab: Register -->
-    <div id="panel-register" class="fade-in">
-     <div class="bg-white rounded-xl border border-slate-200 p-5 mb-4">
-      <h2 class="font-semibold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="calendar-check" class="w-5 h-5 text-blue-600"></i> Registrar Presença</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-       <div>
-        <label for="reg-date" class="block text-xs font-medium text-slate-600 mb-1">Data</label> <input type="date" id="reg-date" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-       </div>
-       <div>
-        <label for="reg-serie" class="block text-xs font-medium text-slate-600 mb-1">Curso</label> <select id="reg-serie" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"> <option value="">Selecione</option> <option value="1º Ano A - Técnico em Controle Ambiental">1º Ano A - Técnico em Controle Ambiental</option> <option value="1º Ano A - Técnico em Guia Turismo">1º Ano A - Técnico em Guia Turismo</option> <option value="1º Ano B - Técnico em Guia Turismo">1º Ano B - Técnico em Guia Turismo</option> <option value="2º Ano A - Técnico em Controle Ambiental">2º Ano A - Técnico em Controle Ambiental</option> <option value="2º Ano B - Técnico em Controle Ambiental">2º Ano B - Técnico em Controle Ambiental</option> <option value="3º Ano A - Parcial">3º Ano A - Parcial</option> <option value="3º Ano B - Parcial">3º Ano B - Parcial</option> </select>
-       </div>
-       <div>
-        <label for="reg-turma" class="block text-xs font-medium text-slate-600 mb-1">Turma</label> <select id="reg-turma" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"> <option value="">Selecione</option> <option value="Única">Única</option> </select>
-       </div>
-      </div><button onclick="loadStudentsForAttendance()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"> <i data-lucide="search" class="w-4 h-4 inline-block mr-1"></i> Carregar Alunos </button>
-     </div><!-- Attendance List -->
-     <div id="attendance-list" class="hidden bg-white rounded-xl border border-slate-200 p-5 fade-in">
-      <div class="flex items-center justify-between mb-4">
-       <h3 class="font-semibold text-slate-700">Lista de Chamada</h3><button onclick="saveAttendance()" id="btn-save-attendance" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"> <i data-lucide="save" class="w-4 h-4 inline-block mr-1"></i> Salvar Frequência </button>
-      </div>
-      <div id="attendance-items" class="space-y-2"></div>
-      <p id="no-students-msg" class="text-sm text-slate-400 text-center py-6 hidden">Nenhum aluno cadastrado nesta turma.</p>
-     </div>
-    </div><!-- Tab: Students -->
-    <div id="panel-students" class="hidden fade-in">
-     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"><!-- Adicionar um por um -->
-      <div class="bg-white rounded-xl border border-slate-200 p-5">
-       <h2 class="font-semibold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-blue-600"></i> Adicionar Aluno</h2>
-       <form onsubmit="addStudent(event)" class="space-y-3">
-        <div>
-         <label for="st-name" class="block text-xs font-medium text-slate-600 mb-1">Nome do Aluno</label> <input type="text" id="st-name" required placeholder="Nome completo" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-         <div>
-          <label for="st-serie" class="block text-xs font-medium text-slate-600 mb-1">Curso</label> <select id="st-serie" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"> <option value="">Selecione</option> <option value="1º Ano A - Técnico em Controle Ambiental">1º Ano A - Técnico em Controle Ambiental</option> <option value="1º Ano A - Técnico em Guia Turismo">1º Ano A - Técnico em Guia Turismo</option> <option value="1º Ano B - Técnico em Guia Turismo">1º Ano B - Técnico em Guia Turismo</option> <option value="2º Ano A - Técnico em Controle Ambiental">2º Ano A - Técnico em Controle Ambiental</option> <option value="2º Ano B - Técnico em Controle Ambiental">2º Ano B - Técnico em Controle Ambiental</option> <option value="3º Ano A - Parcial">3º Ano A - Parcial</option> <option value="3º Ano B - Parcial">3º Ano B - Parcial</option> </select>
-         </div>
-         <div>
-          <label for="st-turma" class="block text-xs font-medium text-slate-600 mb-1">Turma</label> <select id="st-turma" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"> <option value="">Selecione</option> <option value="Única">Única</option> </select>
-         </div>
-        </div><button type="submit" id="btn-add-student" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"> <i data-lucide="plus" class="w-4 h-4 inline-block mr-1"></i> Adicionar </button>
-       </form>
-      </div><!-- Importar lista -->
-      <div class="bg-white rounded-xl border border-slate-200 p-5">
-       <h2 class="font-semibold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="upload" class="w-5 h-5 text-green-600"></i> Importar Lista</h2>
-       <div class="space-y-3">
-        <div><label for="bulk-file" class="block text-xs font-medium text-slate-600 mb-2">Arquivo (CSV ou TXT)</label> <input type="file" id="bulk-file" accept=".csv,.txt" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-         <p class="text-xs text-slate-400 mt-1">Formato: Nome, Série, Turma (uma linha por aluno)</p>
-        </div>
-        <div class="bg-slate-50 rounded-lg p-3 text-xs text-slate-600 border border-slate-200">
-         <p class="font-medium mb-1">Exemplo:</p><code class="block text-slate-500 whitespace-pre-wrap">João Silva, 1º Ano, A Maria Santos, 1º Ano, A Pedro Costa, 2º Ano, B</code>
-        </div><button onclick="importStudents()" class="w-full bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"> <i data-lucide="file-check" class="w-4 h-4 inline-block mr-1"></i> Importar </button>
-       </div>
-      </div>
-     </div><!-- Student List -->
-     <div class="bg-white rounded-xl border border-slate-200 p-5">
-      <div class="flex items-center justify-between mb-4">
-       <h3 class="font-semibold text-slate-700">Alunos Cadastrados</h3>
-       <div>
-        <label for="filter-serie" onchange="renderStudentList()" class="block text-xs font-medium text-slate-600 mb-1">Curso</label> <select id="filter-serie" onchange="renderStudentList()" class="w-full border border-slate-300 rounded-lg px-2 py-1 text-sm"> <option value="">Todos os cursos</option> <option value="1º Ano A - Técnico em Controle Ambiental">1º Ano A - Técnico em Controle Ambiental</option> <option value="1º Ano A - Técnico em Guia Turismo">1º Ano A - Técnico em Guia Turismo</option> <option value="1º Ano B - Técnico em Guia Turismo">1º Ano B - Técnico em Guia Turismo</option> <option value="2º Ano A - Técnico em Controle Ambiental">2º Ano A - Técnico em Controle Ambiental</option> <option value="2º Ano B - Técnico em Controle Ambiental">2º Ano B - Técnico em Controle Ambiental</option> <option value="3º Ano A - Parcial">3º Ano A - Parcial</option> <option value="3º Ano B - Parcial">3º Ano B - Parcial</option> </select>
-       </div>
-      </div>
-      <div id="student-list" class="space-y-2"></div>
-      <p id="no-students" class="text-sm text-slate-400 text-center py-6 hidden">Nenhum aluno cadastrado ainda.</p>
-     </div>
-    </div><!-- Tab: Reports -->
-    <div id="panel-reports" class="hidden fade-in">
-     <div class="bg-white rounded-xl border border-slate-200 p-5 mb-4">
-      <h2 class="font-semibold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i> Relatório de Frequência</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 mb-4">
-       <div>
-        <label for="rpt-serie" class="block text-xs font-medium text-slate-600 mb-1">Curso</label> <select id="rpt-serie" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"> <option value="">Todos</option> <option value="1º Ano A - Técnico em Controle Ambiental">1º Ano A - Técnico em Controle Ambiental</option> <option value="1º Ano A - Técnico em Guia Turismo">1º Ano A - Técnico em Guia Turismo</option> <option value="1º Ano B - Técnico em Guia Turismo">1º Ano B - Técnico em Guia Turismo</option> <option value="2º Ano A - Técnico em Controle Ambiental">2º Ano A - Técnico em Controle Ambiental</option> <option value="2º Ano B - Técnico em Controle Ambiental">2º Ano B - Técnico em Controle Ambiental</option> <option value="3º Ano A - Parcial">3º Ano A - Parcial</option> <option value="3º Ano B - Parcial">3º Ano B - Parcial</option> </select>
-       </div>
-       <div>
-        <label for="rpt-turma" class="block text-xs font-medium text-slate-600 mb-1">Turma</label> <select id="rpt-turma" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"> <option value="">Todas</option> <option value="Única">Única</option> </select>
-       </div>
-       <div>
-        <label for="rpt-from" class="block text-xs font-medium text-slate-600 mb-1">De</label> <input type="date" id="rpt-from" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-       </div>
-       <div>
-        <label for="rpt-to" class="block text-xs font-medium text-slate-600 mb-1">Até</label> <input type="date" id="rpt-to" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-       </div>
-      </div><button onclick="generateReport()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"> <i data-lucide="file-text" class="w-4 h-4 inline-block mr-1"></i> Gerar Relatório </button>
-     </div>
-     <div id="report-results" class="hidden bg-white rounded-xl border border-slate-200 p-5 fade-in">
-      <div id="report-summary" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4"></div>
-      <div id="report-table" class="overflow-x-auto"></div>
-     </div>
-    </div>
-   </main>
-  </div>
-  <script>
-  // State
-  let allRecords = [];
-  let currentTab = 'register';
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frequência Escolar</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{font-family:'DM Sans',sans-serif}
+.tab-active{border-bottom:3px solid #1e40af;color:#1e40af;font-weight:600}
+.fade-in{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.toast{animation:slideIn .3s ease,fadeOut .3s ease 2.7s}
+@keyframes slideIn{from{transform:translateY(-20px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+</style>
+</head>
+<body class="h-full bg-slate-50">
+<div id="app" class="h-full w-full overflow-auto">
+<header class="bg-white border-b border-slate-200 px-4 py-4 shadow-sm">
+<div class="max-w-5xl mx-auto flex items-center justify-between">
+<div>
+<h1 class="text-xl font-bold text-slate-800">Frequência Escolar</h1>
+<p class="text-sm text-slate-500">Escola Estadual</p>
+</div>
+<div class="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-lg">
+<i data-lucide="users" class="w-4 h-4 text-blue-700"></i>
+<span id="total-count" class="text-sm font-medium text-blue-700">0 registros</span>
+</div>
+</div>
+</header>
+<nav class="bg-white border-b border-slate-200 px-4">
+<div class="max-w-5xl mx-auto flex gap-6">
+<button onclick="switchTab('register')" id="tab-register" class="py-3 px-1 text-sm tab-active">Registrar Frequência</button>
+<button onclick="switchTab('students')" id="tab-students" class="py-3 px-1 text-sm text-slate-500 hover:text-slate-700">Alunos</button>
+<button onclick="switchTab('reports')" id="tab-reports" class="py-3 px-1 text-sm text-slate-500 hover:text-slate-700">Relatórios</button>
+</div>
+</nav>
+<div id="toast" class="fixed top-4 right-4 z-50 hidden"></div>
+<main class="max-w-5xl mx-auto p-4">
+<div id="panel-register" class="fade-in">
+<div class="bg-white rounded-xl border border-slate-200 p-5 mb-4">
+<h2 class="font-semibold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="calendar-check" class="w-5 h-5 text-blue-600"></i> Registrar Presença</h2>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+<div><label for="reg-date" class="block text-xs font-medium text-slate-600 mb-1">Data</label><input type="date" id="reg-date" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div><label for="reg-serie" class="block text-xs font-medium text-slate-600 mb-1">Curso</label><select id="reg-serie" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="">Selecione</option><option value="1º Ano A - Técnico em Controle Ambiental">1º Ano A - Técnico em Controle Ambiental</option><option value="1º Ano A - Técnico em Guia Turismo">1º Ano A - Técnico em Guia Turismo</option><option value="1º Ano B - Técnico em Guia Turismo">1º Ano B - Técnico em Guia Turismo</option><option value="2º Ano A - Técnico em Controle Ambiental">2º Ano A - Técnico em Controle Ambiental</option><option value="2º Ano B - Técnico em Controle Ambiental">2º Ano B - Técnico em Controle Ambiental</option><option value="3º Ano A - Parcial">3º Ano A - Parcial</option><option value="3º Ano B - Parcial">3º Ano B - Parcial</option></select></div>
+<div><label for="reg-turma" class="block text-xs font-medium text-slate-600 mb-1">Turma</label><select id="reg-turma" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="">Selecione</option><option value="Única">Única</option></select></div>
+</div>
+<button onclick="loadStudentsForAttendance()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"><i data-lucide="search" class="w-4 h-4 inline-block mr-1"></i> Carregar Alunos</button>
+</div>
+<div id="attendance-list" class="hidden bg-white rounded-xl border border-slate-200 p-5 fade-in">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-semibold text-slate-700">Lista de Chamada</h3>
+<button onclick="saveAttendance()" id="btn-save-attendance" class="bg-green-600 hover:bg-green-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"><i data-lucide="save" class="w-4 h-4 inline-block mr-1"></i> Salvar Frequência</button>
+</div>
+<div id="attendance-items" class="space-y-2"></div>
+<p id="no-students-msg" class="text-sm text-slate-400 text-center py-6 hidden">Nenhum aluno cadastrado nesta turma.</p>
+</div>
+</div>
+<div id="panel-students" class="hidden fade-in">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+<div class="bg-white rounded-xl border border-slate-200 p-5">
+<h2 class="font-semibold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="user-plus" class="w-5 h-5 text-blue-600"></i> Adicionar Aluno</h2>
+<form onsubmit="addStudent(event)" class="space-y-3">
+<div><label for="st-name" class="block text-xs font-medium text-slate-600 mb-1">Nome do Aluno</label><input type="text" id="st-name" required placeholder="Nome completo" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"></div>
+<div class="grid grid-cols-2 gap-2">
+<div><label for="st-serie" class="block text-xs font-medium text-slate-600 mb-1">Curso</label><select id="st-serie" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="">Selecione</option><option value="1º Ano A - Técnico em Controle Ambiental">1º Ano A - Técnico em Controle Ambiental</option><option value="1º Ano A - Técnico em Guia Turismo">1º Ano A - Técnico em Guia Turismo</option><option value="1º Ano B - Técnico em Guia Turismo">1º Ano B - Técnico em Guia Turismo</option><option value="2º Ano A - Técnico em Controle Ambiental">2º Ano A - Técnico em Controle Ambiental</option><option value="2º Ano B - Técnico em Controle Ambiental">2º Ano B - Técnico em Controle Ambiental</option><option value="3º Ano A - Parcial">3º Ano A - Parcial</option><option value="3º Ano B - Parcial">3º Ano B - Parcial</option></select></div>
+<div><label for="st-turma" class="block text-xs font-medium text-slate-600 mb-1">Turma</label><select id="st-turma" required class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"><option value="">Selecione</option><option value="Única">Única</option></select></div>
+</div>
+<button type="submit" id="btn-add-student" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"><i data-lucide="plus" class="w-4 h-4 inline-block mr-1"></i> Adicionar</button>
+</form>
+</div>
+</div>
+<div class="bg-white rounded-xl border border-slate-200 p-5">
+<h3 class="font-semibold text-slate-700 mb-4">Alunos Cadastrados</h3>
+<div id="student-list" class="space-y-2"></div>
+<p id="no-students" class="text-sm text-slate-400 text-center py-6 hidden">Nenhum aluno cadastrado ainda.</p>
+</div>
+</div>
+<div id="panel-reports" class="hidden fade-in">
+<div class="bg-white rounded-xl border border-slate-200 p-5 mb-4">
+<h2 class="font-semibold text-slate-700 mb-4 flex items-center gap-2"><i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i> Relatório de Frequência</h2>
+<button onclick="generateReport()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"><i data-lucide="file-text" class="w-4 h-4 inline-block mr-1"></i> Gerar Relatório</button>
+</div>
+<div id="report-results" class="hidden bg-white rounded-xl border border-slate-200 p-5 fade-in">
+<div id="report-summary" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4"></div>
+<div id="report-table" class="overflow-x-auto"></div>
+</div>
+</div>
+</main>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push, set, get, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-  const defaultConfig = {
-    app_title: 'Frequência Escolar',
-    school_name: 'Escola Estadual',
-    background_color: '#f8fafc',
-    surface_color: '#ffffff',
-    text_color: '#1e293b',
-    primary_color: '#1e40af',
-    secondary_color: '#16a34a',
-    font_family: 'DM Sans',
-    font_size: 14
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDWCezAji-Dy-73RiUB9-AdTSdFSVYIHro",
+  authDomain: "frequencia-escolar-pedroii.firebaseapp.com",
+  databaseURL: "https://frequencia-escolar-pedroii-default-rtdb.firebaseio.com",
+  projectId: "frequencia-escolar-pedroii",
+  storageBucket: "frequencia-escolar-pedroii.firebasestorage.app",
+  messagingSenderId: "356639139556",
+  appId: "1:356639139556:web:ea2659a10315baf11feef1"
+};
 
-  // Element SDK
-  window.elementSdk.init({
-    defaultConfig,
-    onConfigChange: async (config) => {
-      const title = config.app_title || defaultConfig.app_title;
-      const school = config.school_name || defaultConfig.school_name;
-      const font = config.font_family || defaultConfig.font_family;
-      const size = config.font_size || defaultConfig.font_size;
-      const bg = config.background_color || defaultConfig.background_color;
-      const surface = config.surface_color || defaultConfig.surface_color;
-      const text = config.text_color || defaultConfig.text_color;
-      const primary = config.primary_color || defaultConfig.primary_color;
-      const secondary = config.secondary_color || defaultConfig.secondary_color;
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const alunosRef = ref(db, "alunos");
+const frequenciasRef = ref(db, "frequencias");
 
-      document.getElementById('app-title').textContent = title;
-      document.getElementById('school-name').textContent = school;
-      document.getElementById('app').style.backgroundColor = bg;
-      document.getElementById('app').style.fontFamily = `${font}, sans-serif`;
-      document.getElementById('app').style.fontSize = `${size}px`;
+let alunos = [];
+let frequencias = {};
 
-      document.querySelectorAll('.bg-white').forEach(el => el.style.backgroundColor = surface);
-      document.querySelectorAll('.text-slate-800, .text-slate-700').forEach(el => el.style.color = text);
-      document.querySelectorAll('.bg-blue-600').forEach(el => { el.style.backgroundColor = primary; });
-      document.querySelectorAll('.bg-green-600').forEach(el => { el.style.backgroundColor = secondary; });
-    },
-    mapToCapabilities: (config) => ({
-      recolorables: [
-        { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
-        { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
-        { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
-        { get: () => config.primary_color || defaultConfig.primary_color, set: (v) => { config.primary_color = v; window.elementSdk.setConfig({ primary_color: v }); } },
-        { get: () => config.secondary_color || defaultConfig.secondary_color, set: (v) => { config.secondary_color = v; window.elementSdk.setConfig({ secondary_color: v }); } }
-      ],
-      borderables: [],
-      fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
-      fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
-    }),
-    mapToEditPanelValues: (config) => new Map([
-      ['app_title', config.app_title || defaultConfig.app_title],
-      ['school_name', config.school_name || defaultConfig.school_name]
-    ])
-  });
+function showToast(msg,type='success'){
+const el=document.getElementById('toast');
+const color=type==='success'?'bg-green-600':'bg-red-600';
+el.innerHTML=`<div class="toast ${color} text-white px-4 py-2 rounded-lg shadow-lg text-sm">${msg}</div>`;
+el.classList.remove('hidden');
+setTimeout(()=>el.classList.add('hidden'),3000);
+}
 
-  // Data SDK
-  const dataHandler = {
-    onDataChanged(data) {
-      allRecords = data;
-      document.getElementById('total-count').textContent = `${data.length} registros`;
-      if (currentTab === 'students') renderStudentList();
-    }
-  };
+window.switchTab = function(tab){
+['register','students','reports'].forEach(t=>{
+document.getElementById(`panel-${t}`).classList.toggle('hidden',t!==tab);
+document.getElementById(`tab-${t}`).classList.toggle('tab-active',t===tab);
+});
+if(tab==='students')renderStudentList();
+}
 
-  (async () => {
-    const r = await window.dataSdk.init(dataHandler);
-    if (!r.isOk) console.error('Data SDK init failed');
-  })();
+window.addStudent = function(e){
+e.preventDefault();
+const nome=document.getElementById('st-name').value.trim();
+const serie=document.getElementById('st-serie').value;
+const turma=document.getElementById('st-turma').value;
+if(!nome||!serie||!turma)return;
+push(alunosRef,{nome,serie,turma});
+document.getElementById('st-name').value='';
+showToast('Aluno adicionado!');
+}
 
-  // Tabs
-  function switchTab(tab) {
-    currentTab = tab;
-    ['register', 'students', 'reports'].forEach(t => {
-      document.getElementById(`panel-${t}`).classList.toggle('hidden', t !== tab);
-      const btn = document.getElementById(`tab-${t}`);
-      btn.classList.toggle('tab-active', t === tab);
-      btn.classList.toggle('text-slate-500', t !== tab);
-    });
-    if (tab === 'students') renderStudentList();
-  }
+onValue(alunosRef,(snapshot)=>{
+const data=snapshot.val()||{};
+alunos=Object.entries(data).map(([id,v])=>({id,...v}));
+document.getElementById('total-count').textContent=`${alunos.length} registros`;
+renderStudentList();
+});
 
-  // Toast
-  function showToast(msg, type = 'success') {
-    const el = document.getElementById('toast');
-    const colors = type === 'success' ? 'bg-green-600' : 'bg-red-600';
-    el.innerHTML = `<div class="toast ${colors} text-white px-4 py-2 rounded-lg shadow-lg text-sm">${msg}</div>`;
-    el.classList.remove('hidden');
-    setTimeout(() => el.classList.add('hidden'), 3000);
-  }
+function renderStudentList(){
+const container=document.getElementById('student-list');
+const noMsg=document.getElementById('no-students');
+if(alunos.length===0){container.innerHTML='';noMsg.classList.remove('hidden');return;}
+noMsg.classList.add('hidden');
+container.innerHTML=alunos.map(a=>`
+<div class="flex items-center justify-between border border-slate-100 rounded-lg px-3 py-2">
+<div><span class="font-medium text-slate-700 text-sm">${a.nome}</span>
+<span class="ml-2 text-xs text-slate-400">${a.serie} - Turma ${a.turma}</span></div>
+<button onclick="deleteStudent('${a.id}')" class="text-red-500 hover:text-red-700 text-xs flex items-center gap-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i>Remover</button>
+</div>`).join('');
+lucide.createIcons();
+}
 
-  // Students
-  async function addStudent(e) {
-    e.preventDefault();
-    const name = document.getElementById('st-name').value.trim();
-    const serie = document.getElementById('st-serie').value;
-    const turma = document.getElementById('st-turma').value;
-    if (!name || !serie || !turma) return;
+window.deleteStudent = function(id){
+remove(ref(db,`alunos/${id}`));
+showToast('Aluno removido.');
+}
 
-    if (allRecords.length >= 999) { showToast('Limite de 999 registros atingido!', 'error'); return; }
+window.loadStudentsForAttendance = function(){
+const date=document.getElementById('reg-date').value;
+const serie=document.getElementById('reg-serie').value;
+const turma=document.getElementById('reg-turma').value;
+if(!date||!serie||!turma){showToast('Preencha todos os campos','error');return;}
+const listDiv=document.getElementById('attendance-list');
+const container=document.getElementById('attendance-items');
+const noMsg=document.getElementById('no-students-msg');
+const alunosTurma=alunos.filter(a=>a.serie===serie&&a.turma===turma);
+listDiv.classList.remove('hidden');
+if(alunosTurma.length===0){container.innerHTML='';noMsg.classList.remove('hidden');return;}
+noMsg.classList.add('hidden');
+const turmaRef=ref(db,`frequencias/${date}/${serie}/${turma}`);
+get(turmaRef).then(snap=>{
+const data=snap.val()||{};
+container.innerHTML=alunosTurma.map((a,i)=>{
+const checked=data[a.nome]===true?'checked':'';
+return `<div class="flex items-center justify-between border border-slate-100 rounded-lg px-3 py-2">
+<div class="flex items-center gap-3"><span class="text-xs text-slate-400 w-5">${i+1}</span>
+<span class="text-sm font-medium text-slate-700">${a.nome}</span></div>
+<label class="flex items-center gap-2 cursor-pointer"><span class="text-xs text-slate-500">Presente</span>
+<input type="checkbox" data-student="${a.nome}" ${checked} class="w-4 h-4 accent-green-600 rounded"></label></div>`;
+}).join('');
+lucide.createIcons();
+});
+}
 
-    const btn = document.getElementById('btn-add-student');
-    btn.disabled = true; btn.textContent = 'Salvando...';
+window.saveAttendance = function(){
+const date=document.getElementById('reg-date').value;
+const serie=document.getElementById('reg-serie').value;
+const turma=document.getElementById('reg-turma').value;
+const checkboxes=document.querySelectorAll('#attendance-items input[type="checkbox"]');
+const lista={};
+checkboxes.forEach(cb=>{lista[cb.getAttribute('data-student')]=cb.checked;});
+set(ref(db,`frequencias/${date}/${serie}/${turma}`),lista);
+showToast('Frequência salva!');
+}
 
-    // We store a record with date="" to represent a student entry (roster), and date=YYYY-MM-DD for attendance
-    const result = await window.dataSdk.create({ student_name: name, serie, turma, date: '', present: false });
-    btn.disabled = false; btn.innerHTML = '<i data-lucide="plus" class="w-4 h-4 inline-block mr-1"></i> Adicionar';
-    lucide.createIcons();
+onValue(frequenciasRef,(snapshot)=>{frequencias=snapshot.val()||{};});
 
-    if (result.isOk) {
-      showToast(`${name} adicionado!`);
-      document.getElementById('st-name').value = '';
-    } else {
-      showToast('Erro ao salvar.', 'error');
-    }
-  }
+window.generateReport = function(){
+const resultsDiv=document.getElementById('report-results');
+resultsDiv.classList.remove('hidden');
+let total=0,present=0;
+Object.values(frequencias).forEach(dias=>{
+Object.values(dias).forEach(series=>{
+Object.values(series).forEach(turmas=>{
+Object.values(turmas).forEach(v=>{
+total++;if(v===true)present++;
+});
+});
+});
+});
+const absent=total-present;
+const pct=total>0?((present/total)*100).toFixed(1):0;
+document.getElementById('report-summary').innerHTML=`
+<div class="bg-blue-50 rounded-lg p-3 text-center"><div class="text-2xl font-bold text-blue-700">${total}</div><div class="text-xs text-blue-600">Total</div></div>
+<div class="bg-green-50 rounded-lg p-3 text-center"><div class="text-2xl font-bold text-green-700">${present}</div><div class="text-xs text-green-600">Presenças</div></div>
+<div class="bg-red-50 rounded-lg p-3 text-center"><div class="text-2xl font-bold text-red-700">${absent}</div><div class="text-xs text-red-600">Faltas</div></div>
+<div class="bg-purple-50 rounded-lg p-3 text-center"><div class="text-2xl font-bold text-purple-700">${pct}%</div><div class="text-xs text-purple-600">Frequência</div></div>`;
+document.getElementById('report-table').innerHTML='<p class="text-sm text-slate-400 text-center py-4">Relatório geral gerado.</p>';
+}
 
-  async function importStudents() {
-    const file = document.getElementById('bulk-file').files[0];
-    if (!file) { showToast('Selecione um arquivo.', 'error'); return; }
-
-    const text = await file.text();
-    const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
-
-    if (lines.length === 0) { showToast('Arquivo vazio.', 'error'); return; }
-
-    let imported = 0;
-    let failed = 0;
-
-    for (const line of lines) {
-      const parts = line.split(',').map(p => p.trim());
-      if (parts.length < 3) { failed++; continue; }
-
-      const [name, serie, turma] = parts;
-      if (!name || !serie || !turma) { failed++; continue; }
-
-      if (allRecords.length >= 999) { showToast('Limite atingido!', 'error'); break; }
-
-      const result = await window.dataSdk.create({ student_name: name, serie, turma, date: '', present: false });
-      if (result.isOk) imported++; else failed++;
-    }
-
-    document.getElementById('bulk-file').value = '';
-    showToast(`✓ ${imported} importados${failed > 0 ? `, ${failed} erros` : ''}`);
-  }
-
-  function getUniqueStudents() {
-    // Students are records with date === ''
-    return allRecords.filter(r => r.date === '');
-  }
-
-  function renderStudentList() {
-    const filterS = document.getElementById('filter-serie').value;
-    const filterT = document.getElementById('filter-turma').value;
-    let students = getUniqueStudents();
-    if (filterS) students = students.filter(s => s.serie === filterS);
-    if (filterT) students = students.filter(s => s.turma === filterT);
-
-    const container = document.getElementById('student-list');
-    const noMsg = document.getElementById('no-students');
-
-    if (students.length === 0) {
-      container.innerHTML = '';
-      noMsg.classList.remove('hidden');
-      return;
-    }
-    noMsg.classList.add('hidden');
-
-    container.innerHTML = students.map(s => `
-      <div class="flex items-center justify-between border border-slate-100 rounded-lg px-3 py-2">
-        <div>
-          <span class="font-medium text-slate-700 text-sm">${s.student_name}</span>
-          <span class="ml-2 text-xs text-slate-400">${s.serie} - Turma ${s.turma}</span>
-        </div>
-        <button onclick="deleteStudent('${s.__backendId}')" class="text-red-500 hover:text-red-700 text-xs flex items-center gap-1">
-          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Remover
-        </button>
-      </div>
-    `).join('');
-    lucide.createIcons();
-  }
-
-  let pendingDelete = null;
-  async function deleteStudent(id) {
-    const record = allRecords.find(r => r.__backendId === id);
-    if (!record) return;
-
-    if (pendingDelete === id) {
-      const result = await window.dataSdk.delete(record);
-      pendingDelete = null;
-      if (result.isOk) showToast('Aluno removido.');
-      else showToast('Erro ao remover.', 'error');
-    } else {
-      pendingDelete = id;
-      showToast('Clique novamente para confirmar a remoção.');
-      setTimeout(() => { pendingDelete = null; }, 3000);
-    }
-  }
-
-  // Attendance
-  function loadStudentsForAttendance() {
-    const date = document.getElementById('reg-date').value;
-    const serie = document.getElementById('reg-serie').value;
-    const turma = document.getElementById('reg-turma').value;
-    if (!date || !serie || !turma) { showToast('Preencha data, série e turma.', 'error'); return; }
-
-    const students = getUniqueStudents().filter(s => s.serie === serie && s.turma === turma);
-    const container = document.getElementById('attendance-items');
-    const listDiv = document.getElementById('attendance-list');
-    const noMsg = document.getElementById('no-students-msg');
-
-    listDiv.classList.remove('hidden');
-
-    if (students.length === 0) {
-      container.innerHTML = '';
-      noMsg.classList.remove('hidden');
-      return;
-    }
-    noMsg.classList.add('hidden');
-
-    // Check existing attendance for this date
-    const existing = allRecords.filter(r => r.date === date && r.serie === serie && r.turma === turma);
-    const attendanceMap = {};
-    existing.forEach(r => { attendanceMap[r.student_name] = r.present; });
-
-    container.innerHTML = students.map((s, i) => {
-      const checked = attendanceMap[s.student_name] === true ? 'checked' : '';
-      return `
-        <div class="flex items-center justify-between border border-slate-100 rounded-lg px-3 py-2">
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-slate-400 w-5">${i + 1}</span>
-            <span class="text-sm font-medium text-slate-700">${s.student_name}</span>
-          </div>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <span class="text-xs text-slate-500">Presente</span>
-            <input type="checkbox" data-student="${s.student_name}" ${checked} class="w-4 h-4 accent-green-600 rounded">
-          </label>
-        </div>`;
-    }).join('');
-    lucide.createIcons();
-  }
-
-  async function saveAttendance() {
-    const date = document.getElementById('reg-date').value;
-    const serie = document.getElementById('reg-serie').value;
-    const turma = document.getElementById('reg-turma').value;
-    if (!date || !serie || !turma) return;
-
-    const checkboxes = document.querySelectorAll('#attendance-items input[type="checkbox"]');
-    if (checkboxes.length === 0) return;
-
-    const btn = document.getElementById('btn-save-attendance');
-    btn.disabled = true; btn.textContent = 'Salvando...';
-
-    // Remove existing attendance for this date/serie/turma
-    const existing = allRecords.filter(r => r.date === date && r.serie === serie && r.turma === turma);
-    for (const rec of existing) {
-      await window.dataSdk.delete(rec);
-    }
-
-    // Save new
-    for (const cb of checkboxes) {
-      if (allRecords.length >= 999) { showToast('Limite de registros atingido!', 'error'); break; }
-      const studentName = cb.getAttribute('data-student');
-      await window.dataSdk.create({ student_name: studentName, serie, turma, date, present: cb.checked });
-    }
-
-    btn.disabled = false;
-    btn.innerHTML = '<i data-lucide="save" class="w-4 h-4 inline-block mr-1"></i> Salvar Frequência';
-    lucide.createIcons();
-    showToast('Frequência salva com sucesso!');
-  }
-
-  // Reports
-  function generateReport() {
-    const serie = document.getElementById('rpt-serie').value;
-    const turma = document.getElementById('rpt-turma').value;
-    const from = document.getElementById('rpt-from').value;
-    const to = document.getElementById('rpt-to').value;
-
-    // Filter attendance records (date !== '')
-    let records = allRecords.filter(r => r.date !== '');
-    if (serie) records = records.filter(r => r.serie === serie);
-    if (turma) records = records.filter(r => r.turma === turma);
-    if (from) records = records.filter(r => r.date >= from);
-    if (to) records = records.filter(r => r.date <= to);
-
-    const resultsDiv = document.getElementById('report-results');
-    resultsDiv.classList.remove('hidden');
-
-    const total = records.length;
-    const present = records.filter(r => r.present === true).length;
-    const absent = total - present;
-    const pct = total > 0 ? ((present / total) * 100).toFixed(1) : 0;
-
-    document.getElementById('report-summary').innerHTML = `
-      <div class="bg-blue-50 rounded-lg p-3 text-center">
-        <div class="text-2xl font-bold text-blue-700">${total}</div>
-        <div class="text-xs text-blue-600">Total</div>
-      </div>
-      <div class="bg-green-50 rounded-lg p-3 text-center">
-        <div class="text-2xl font-bold text-green-700">${present}</div>
-        <div class="text-xs text-green-600">Presenças</div>
-      </div>
-      <div class="bg-red-50 rounded-lg p-3 text-center">
-        <div class="text-2xl font-bold text-red-700">${absent}</div>
-        <div class="text-xs text-red-600">Faltas</div>
-      </div>
-      <div class="bg-purple-50 rounded-lg p-3 text-center">
-        <div class="text-2xl font-bold text-purple-700">${pct}%</div>
-        <div class="text-xs text-purple-600">Frequência</div>
-      </div>
-    `;
-
-    // Per-student breakdown
-    const studentMap = {};
-    records.forEach(r => {
-      if (!studentMap[r.student_name]) studentMap[r.student_name] = { present: 0, total: 0, serie: r.serie, turma: r.turma };
-      studentMap[r.student_name].total++;
-      if (r.present) studentMap[r.student_name].present++;
-    });
-
-    const rows = Object.entries(studentMap).sort((a, b) => a[0].localeCompare(b[0]));
-
-    if (rows.length > 0) {
-      document.getElementById('report-table').innerHTML = `
-        <table class="w-full text-sm mt-4">
-          <thead><tr class="text-left border-b border-slate-200">
-            <th class="py-2 text-slate-600 font-medium">Aluno</th>
-            <th class="py-2 text-slate-600 font-medium">Série/Turma</th>
-            <th class="py-2 text-slate-600 font-medium text-center">Presenças</th>
-            <th class="py-2 text-slate-600 font-medium text-center">Faltas</th>
-            <th class="py-2 text-slate-600 font-medium text-center">%</th>
-          </tr></thead>
-          <tbody>${rows.map(([name, d]) => {
-            const p = ((d.present / d.total) * 100).toFixed(0);
-            const color = p >= 75 ? 'text-green-600' : 'text-red-600';
-            return `<tr class="border-b border-slate-50">
-              <td class="py-2 text-slate-700">${name}</td>
-              <td class="py-2 text-slate-500">${d.serie} - ${d.turma}</td>
-              <td class="py-2 text-center text-green-600">${d.present}</td>
-              <td class="py-2 text-center text-red-600">${d.total - d.present}</td>
-              <td class="py-2 text-center font-semibold ${color}">${p}%</td>
-            </tr>`;
-          }).join('')}</tbody>
-        </table>`;
-    } else {
-      document.getElementById('report-table').innerHTML = '<p class="text-sm text-slate-400 text-center py-4">Nenhum registro encontrado.</p>';
-    }
-  }
-
-  // Init date
-  document.getElementById('reg-date').valueAsDate = new Date();
-
-  lucide.createIcons();
+document.getElementById('reg-date').valueAsDate=new Date();
+lucide.createIcons();
 </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a08cb30e3c1fa5c6',t:'MTc4MDk3MjA3MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
