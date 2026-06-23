@@ -8,7 +8,6 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Firebase SDKs Oficiais -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -27,7 +26,6 @@
 </head>
 <body class="h-full bg-slate-50">
   <div id="app" class="h-full flex flex-col overflow-auto w-full">
-    <!-- Header -->
     <header id="main-header" class="bg-gradient-to-r from-[#0f2942] to-[#1e3a5f] text-white px-6 py-4 shadow-lg">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -43,7 +41,6 @@
       </div>
     </header>
 
-    <!-- Navigation -->
     <nav class="bg-white border-b px-4 py-2 flex gap-2 overflow-x-auto shadow-sm">
       <button class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap" data-view="dashboard" onclick="switchView('dashboard')"> <i data-lucide="layout-dashboard" class="w-4 h-4 inline mr-1"></i>Painel </button>
       <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap text-slate-600 hover:bg-slate-100" data-view="students" onclick="switchView('students')"> <i data-lucide="users" class="w-4 h-4 inline mr-1"></i>Alunos </button>
@@ -52,9 +49,7 @@
       <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap text-slate-600 hover:bg-slate-100" data-view="migration" onclick="switchView('migration')"> <i data-lucide="arrow-right-circle" class="w-4 h-4 inline mr-1"></i>Migração </button>
     </nav>
 
-    <!-- Content -->
     <main class="flex-1 p-4 md:p-6 overflow-auto w-full">
-      <!-- Dashboard -->
       <div id="view-dashboard" class="view fade-in">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
@@ -127,7 +122,6 @@
         </div>
       </div>
 
-      <!-- Bulk Import Modal -->
       <div id="bulk-import-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-96 overflow-y-auto">
           <div class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
@@ -155,7 +149,6 @@
         </div>
       </div>
 
-      <!-- Students View -->
       <div id="view-students" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -166,7 +159,6 @@
             </div>
           </div>
 
-          <!-- Student Form -->
           <div id="student-form" class="hidden mb-4 p-4 bg-slate-50 rounded-xl border">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
@@ -210,12 +202,10 @@
             </div>
           </div>
 
-          <!-- Student List -->
           <div id="student-list" class="space-y-2"></div>
         </div>
       </div>
 
-      <!-- Attendance View -->
       <div id="view-attendance" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <h2 class="text-lg font-bold text-slate-800 mb-4">Registro de Frequência</h2>
@@ -249,7 +239,6 @@
         </div>
       </div>
 
-      <!-- Reports View -->
       <div id="view-reports" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <h2 class="text-lg font-bold text-slate-800 mb-4">Relatórios de Frequência</h2>
@@ -276,7 +265,6 @@
         </div>
       </div>
 
-      <!-- Migration View -->
       <div id="view-migration" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <h2 class="text-lg font-bold text-slate-800 mb-4">Migração de Turmas</h2>
@@ -309,18 +297,37 @@
   <div id="toast-container"></div>
 
   <script>
-    // Configurações do Firebase - IMPORTANTE: Cole seus dados reais aqui dentro!
+    // Configurações do Firebase - IMPORTANTE: Insira seus dados reais abaixo!
     const firebaseConfig = {
-      apiKey: "COLE_SUA_API_KEY_AQUI",
+      apiKey: "// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDvhx0mZjsrQXrGenUHRdUuDRpo9KqDUPY",
+  authDomain: "ceti-pedro-ii.firebaseapp.com",
+  databaseURL: "https://ceti-pedro-ii-default-rtdb.firebaseio.com",
+  projectId: "ceti-pedro-ii",
+  storageBucket: "ceti-pedro-ii.firebasestorage.app",
+  messagingSenderId: "386044607882",
+  appId: "1:386044607882:web:46c8d0284a12526cc5dc73"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);",
       authDomain: "ceti-pedro-ii.firebaseapp.com",
       projectId: "ceti-pedro-ii",
       storageBucket: "ceti-pedro-ii.appspot.com",
-      messagingSenderId: "COLE_SEU_SENDER_ID_AQUI",
-      appId: "COLE_SEU_APP_ID_AQUI"
+      messagingSenderId: "INSIRA_SEU_SENDER_ID_AQUI",
+      appId: "INSIRA_SEU_APP_ID_AQUI"
     };
 
-    // Inicializar Firebase de forma estável
-    firebase.initializeApp(firebaseConfig);
+    // Inicialização direta e segura (Sem imports)
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const db = firebase.firestore();
 
     const CLASSES = [
@@ -352,24 +359,13 @@
     let editingStudentId = null;
 
     function populateClassSelects() {
-     // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDvhx0mZjsrQXrGenUHRdUuDRpo9KqDUPY",
-  authDomain: "ceti-pedro-ii.firebaseapp.com",
-  databaseURL: "https://ceti-pedro-ii-default-rtdb.firebaseio.com",
-  projectId: "ceti-pedro-ii",
-  storageBucket: "ceti-pedro-ii.firebasestorage.app",
-  messagingSenderId: "386044607882",
-  appId: "1:386044607882:web:46c8d0284a12526cc5dc73"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+      const selects = ['s-class', 'a-class', 'r-class'];
+      selects.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+          select.innerHTML = id === 'r-class' ? '<option value="">Todas</option>' : '';
+          CLASSES.forEach(c => {
+            select.innerHTML += `<option value="${c}">${c}</option>`;
           });
         }
       });
@@ -458,7 +454,7 @@ const app = initializeApp(firebaseConfig);
       try {
         if (editingStudentId) {
           await db.collection("students").doc(editingStudentId).update(studentData);
-          showToast('Aluno atualizado com sucesso');
+          showToast('Aluno updated com sucesso');
         } else {
           studentData.created_at = new Date().toISOString();
           await db.collection("students").add(studentData);
@@ -533,177 +529,4 @@ const app = initializeApp(firebaseConfig);
       const classStudents = allStudents.filter(s => s.class === selectedClass && s.status === 'ativo');
       if (classStudents.length === 0) {
         attendanceStudents.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum aluno ativo nesta turma</p>';
-        document.getElementById('attendance-actions').classList.add('hidden');
-        return;
-      }
-
-      attendanceStudents.innerHTML = classStudents.map(student => `
-        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-          <input type="checkbox" class="attendance-checkbox w-4 h-4" data-student-id="${student.id}" data-student-name="${student.name}">
-          <label class="flex-1 cursor-pointer">
-            <p class="text-sm font-medium text-slate-800">${student.name}</p>
-            <p class="text-xs text-slate-500">${student.matricula}</p>
-          </label>
-        </div>
-      `).join('');
-      document.getElementById('attendance-actions').classList.remove('hidden');
-    }
-
-    async function saveAttendance() {
-      const date = document.getElementById('a-date').value;
-      const selectedClass = document.getElementById('a-class').value;
-      const discipline = document.getElementById('a-discipline').value.trim();
-      const teacher = document.getElementById('a-teacher').value.trim();
-
-      if (!date || !discipline || !teacher) {
-        showToast('Preencha data, disciplina e professor', 'error');
-        return;
-      }
-
-      const checkboxes = document.querySelectorAll('.attendance-checkbox');
-      const btn = document.getElementById('btn-save-attendance');
-      btn.disabled = true;
-
-      try {
-        const batch = db.batch();
-        checkboxes.forEach(checkbox => {
-          const studentId = checkbox.dataset.studentId;
-          const studentName = checkbox.dataset.studentName;
-          const isPresent = checkbox.checked;
-
-          const attRef = db.collection("attendance").doc();
-          batch.set(attRef, {
-            student_id: studentId,
-            student_name: studentName,
-            class: selectedClass,
-            date, discipline, teacher,
-            present: isPresent,
-            created_at: new Date().toISOString()
-          });
-        });
-
-        await batch.commit();
-        showToast('Frequências salvas com sucesso');
-        document.getElementById('attendance-students').innerHTML = '';
-        document.getElementById('attendance-actions').classList.add('hidden');
-      } catch (e) {
-        showToast('Erro ao salvar frequências', 'error');
-        console.error(e);
-      }
-      btn.disabled = false;
-    }
-
-    function generateReport() {
-      const reportType = document.getElementById('r-type').value;
-      const selectedClass = document.getElementById('r-class').value;
-      const container = document.getElementById('report-content');
-
-      if (reportType === 'class') {
-        const classStudents = allStudents.filter(s => !selectedClass || s.class === selectedClass);
-        if (classStudents.length === 0) {
-          container.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum registro encontrado</p>';
-          return;
-        }
-        container.innerHTML = classStudents.map(student => {
-          const totalAulas = allAttendance.filter(a => a.student_id === student.id).length;
-          const presencas = allAttendance.filter(a => a.student_id === student.id && a.present).length;
-          const percentage = totalAulas > 0 ? Math.round((presencas / totalAulas) * 100) : 100;
-
-          return `<div class="p-2 border-b flex justify-between">
-            <div><b>${student.name}</b><br><span class="text-xs text-slate-500">${student.class}</span></div>
-            <div class="text-right"><b>${percentage}%</b><br><span class="text-xs text-slate-500">${presencas}/${totalAulas} Presenças</span></div>
-          </div>`;
-        }).join('');
-      } else {
-        container.innerHTML = '<p class="text-slate-500 text-center py-8">Relatório renderizado.</p>';
-      }
-    }
-
-    function updateDashboard() {
-      document.getElementById('stat-students').textContent = allStudents.length;
-      document.getElementById('stat-attendance').textContent = allAttendance.length;
-
-      const activeStudents = allStudents.filter(s => s.status === 'ativo');
-      let lowFreqCount = 0;
-      let htmlLowFreq = '';
-
-      activeStudents.forEach(student => {
-        const total = allAttendance.filter(a => a.student_id === student.id).length;
-        const presencas = allAttendance.filter(a => a.student_id === student.id && a.present).length;
-        const percentage = total > 0 ? Math.round((presencas / total) * 100) : 100;
-
-        if (percentage < 75) {
-          lowFreqCount++;
-          htmlLowFreq += `<div class="p-2 bg-red-50 border border-red-200 rounded-lg flex justify-between">
-            <span class="font-medium text-red-900">${student.name}</span>
-            <span class="font-bold text-red-600">${percentage}%</span>
-          </div>`;
-        }
-      });
-
-      document.getElementById('stat-alerts').textContent = lowFreqCount;
-      document.getElementById('low-freq-list').innerHTML = htmlLowFreq || '<p class="text-slate-400 text-center py-4">Nenhum alerta</p>';
-    }
-
-    function showBulkImport() { document.getElementById('bulk-import-modal').classList.remove('hidden'); }
-    function closeBulkImport() { document.getElementById('bulk-import-modal').classList.add('hidden'); }
-
-    async function processBulkImport() {
-      const textarea = document.getElementById('bulk-textarea');
-      const lines = textarea.value.trim().split('\n').filter(line => line.trim());
-      if (lines.length === 0) return;
-
-      const btn = document.getElementById('bulk-submit-btn');
-      btn.disabled = true;
-
-      try {
-        const batch = db.batch();
-        lines.forEach(line => {
-          const parts = line.split('|').map(p => p.trim());
-          if (parts.length >= 6) {
-            const [name, matricula, birth_date, course, classValue, status] = parts;
-            const docRef = db.collection("students").doc();
-            batch.set(docRef, { name, matricula, birth_date, course, class: classValue, status, created_at: new Date().toISOString() });
-          }
-        });
-        await batch.commit();
-        showToast('Lista importada com sucesso!');
-        closeBulkImport();
-      } catch (e) {
-        showToast('Erro na importação', 'error');
-      }
-      btn.disabled = false;
-    }
-
-    async function executeMigration() {
-      const btn = document.getElementById('btn-migrate-confirm');
-      btn.disabled = true;
-      try {
-        const batch = db.batch();
-        allStudents.forEach(student => {
-          const nextClass = MIGRATION_MAP[student.class];
-          if (nextClass) {
-            const docRef = db.collection("students").doc(student.id);
-            batch.update(docRef, {
-              class: nextClass,
-              status: nextClass === 'egresso' ? 'egresso' : student.status
-            });
-          }
-        });
-        await batch.commit();
-        showToast('Migração concluída.');
-        document.getElementById('migration-confirm').classList.add('hidden');
-      } catch (e) {
-        showToast('Erro ao migrar', 'error');
-      }
-      btn.disabled = false;
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      populateClassSelects();
-      initDatabaseListeners();
-      lucide.createIcons();
-    });
-  </script>
-</body>
-</html>
+        document.getElementById('attendance-actions').classList.add('
