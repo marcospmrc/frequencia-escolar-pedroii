@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Firebase SDKs Oficiais -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -26,6 +27,7 @@
 </head>
 <body class="h-full bg-slate-50">
   <div id="app" class="h-full flex flex-col overflow-auto w-full">
+    <!-- Header -->
     <header id="main-header" class="bg-gradient-to-r from-[#0f2942] to-[#1e3a5f] text-white px-6 py-4 shadow-lg">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -41,6 +43,7 @@
       </div>
     </header>
 
+    <!-- Navigation -->
     <nav class="bg-white border-b px-4 py-2 flex gap-2 overflow-x-auto shadow-sm">
       <button class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap" data-view="dashboard" onclick="switchView('dashboard')"> <i data-lucide="layout-dashboard" class="w-4 h-4 inline mr-1"></i>Painel </button>
       <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap text-slate-600 hover:bg-slate-100" data-view="students" onclick="switchView('students')"> <i data-lucide="users" class="w-4 h-4 inline mr-1"></i>Alunos </button>
@@ -49,7 +52,9 @@
       <button class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap text-slate-600 hover:bg-slate-100" data-view="migration" onclick="switchView('migration')"> <i data-lucide="arrow-right-circle" class="w-4 h-4 inline mr-1"></i>Migração </button>
     </nav>
 
+    <!-- Content -->
     <main class="flex-1 p-4 md:p-6 overflow-auto w-full">
+      <!-- Dashboard -->
       <div id="view-dashboard" class="view fade-in">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
@@ -122,6 +127,7 @@
         </div>
       </div>
 
+      <!-- Bulk Import Modal -->
       <div id="bulk-import-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-96 overflow-y-auto">
           <div class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
@@ -149,6 +155,7 @@
         </div>
       </div>
 
+      <!-- Students View -->
       <div id="view-students" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
@@ -159,6 +166,7 @@
             </div>
           </div>
 
+          <!-- Student Form -->
           <div id="student-form" class="hidden mb-4 p-4 bg-slate-50 rounded-xl border">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
@@ -202,10 +210,12 @@
             </div>
           </div>
 
+          <!-- Student List -->
           <div id="student-list" class="space-y-2"></div>
         </div>
       </div>
 
+      <!-- Attendance View -->
       <div id="view-attendance" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <h2 class="text-lg font-bold text-slate-800 mb-4">Registro de Frequência</h2>
@@ -239,6 +249,7 @@
         </div>
       </div>
 
+      <!-- Reports View -->
       <div id="view-reports" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <h2 class="text-lg font-bold text-slate-800 mb-4">Relatórios de Frequência</h2>
@@ -265,6 +276,7 @@
         </div>
       </div>
 
+      <!-- Migration View -->
       <div id="view-migration" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <h2 class="text-lg font-bold text-slate-800 mb-4">Migração de Turmas</h2>
@@ -297,34 +309,17 @@
   <div id="toast-container"></div>
 
   <script>
-    // Configurações do Firebase
+    // Configurações do Firebase - IMPORTANTE: Cole seus dados reais aqui dentro!
     const firebaseConfig = {
-      apiKey: "// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyDvhx0mZjsrQXrGenUHRdUuDRpo9KqDUPY",
-  authDomain: "ceti-pedro-ii.firebaseapp.com",
-  databaseURL: "https://ceti-pedro-ii-default-rtdb.firebaseio.com",
-  projectId: "ceti-pedro-ii",
-  storageBucket: "ceti-pedro-ii.firebasestorage.app",
-  messagingSenderId: "386044607882",
-  appId: "1:386044607882:web:46c8d0284a12526cc5dc73"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);",
+      apiKey: "COLE_SUA_API_KEY_AQUI",
       authDomain: "ceti-pedro-ii.firebaseapp.com",
       projectId: "ceti-pedro-ii",
       storageBucket: "ceti-pedro-ii.appspot.com",
-      messagingSenderId: "SEU_SENDER_ID",
-      appId: "SEU_APP_ID"
+      messagingSenderId: "COLE_SEU_SENDER_ID_AQUI",
+      appId: "COLE_SEU_APP_ID_AQUI"
     };
 
-    // Inicializar Firebase
+    // Inicializar Firebase de forma estável
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
@@ -356,23 +351,31 @@ const app = initializeApp(firebaseConfig);",
     let allAttendance = [];
     let editingStudentId = null;
 
-    // Popular os elementos Select de turmas dinamicamente
     function populateClassSelects() {
-      const selects = ['s-class', 'a-class', 'r-class'];
-      selects.forEach(id => {
-        const select = document.getElementById(id);
-        if (select) {
-          select.innerHTML = id === 'r-class' ? '<option value="">Todas</option>' : '';
-          CLASSES.forEach(c => {
-            select.innerHTML += `<option value="${c}">${c}</option>`;
+     // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDvhx0mZjsrQXrGenUHRdUuDRpo9KqDUPY",
+  authDomain: "ceti-pedro-ii.firebaseapp.com",
+  databaseURL: "https://ceti-pedro-ii-default-rtdb.firebaseio.com",
+  projectId: "ceti-pedro-ii",
+  storageBucket: "ceti-pedro-ii.firebasestorage.app",
+  messagingSenderId: "386044607882",
+  appId: "1:386044607882:web:46c8d0284a12526cc5dc73"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
           });
         }
       });
     }
 
-    // Escutar atualizações do Firestore em tempo real
     function initDatabaseListeners() {
-      // Escutar Alunos
       db.collection("students").onSnapshot((snapshot) => {
         allStudents = [];
         snapshot.forEach((doc) => {
@@ -382,7 +385,6 @@ const app = initializeApp(firebaseConfig);",
         renderStudentList();
       }, error => console.error("Erro alunos:", error));
 
-      // Escutar Frequências
       db.collection("attendance").onSnapshot((snapshot) => {
         allAttendance = [];
         snapshot.forEach((doc) => {
@@ -394,9 +396,12 @@ const app = initializeApp(firebaseConfig);",
 
     function switchView(view) {
       document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-      document.getElementById(`view-${view}`).classList.remove('hidden');
+      const activeView = document.getElementById(`view-${view}`);
+      if (activeView) activeView.classList.remove('hidden');
+      
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active', 'bg-[#1e3a5f]', 'text-white'));
-      document.querySelector(`[data-view="${view}"]`).classList.add('active', 'bg-[#1e3a5f]', 'text-white');
+      const activeBtn = document.querySelector(`[data-view="${view}"]`);
+      if (activeBtn) activeBtn.classList.add('active', 'bg-[#1e3a5f]', 'text-white');
       lucide.createIcons();
     }
 
@@ -484,8 +489,8 @@ const app = initializeApp(firebaseConfig);",
             <p class="text-xs text-slate-500">${student.matricula} • ${student.class} (${student.status})</p>
           </div>
           <div class="flex gap-2">
-            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-700 p-1" title="Editar"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
-            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-700 p-1" title="Deletar"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-700 p-1"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+            <button onclick="deleteStudent('${student.id}')" class="text-red-600 hover:text-red-700 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
           </div>
         </div>
       `).join('');
@@ -564,7 +569,7 @@ const app = initializeApp(firebaseConfig);",
         checkboxes.forEach(checkbox => {
           const studentId = checkbox.dataset.studentId;
           const studentName = checkbox.dataset.studentName;
-          const isPresent = checkbox.checked; // true se marcado, false se desmarcado (Falta)
+          const isPresent = checkbox.checked;
 
           const attRef = db.collection("attendance").doc();
           batch.set(attRef, {
@@ -610,7 +615,7 @@ const app = initializeApp(firebaseConfig);",
           </div>`;
         }).join('');
       } else {
-        container.innerHTML = '<p class="text-slate-500 text-center py-8">Relatório gerado em tela.</p>';
+        container.innerHTML = '<p class="text-slate-500 text-center py-8">Relatório renderizado.</p>';
       }
     }
 
@@ -665,7 +670,7 @@ const app = initializeApp(firebaseConfig);",
         showToast('Lista importada com sucesso!');
         closeBulkImport();
       } catch (e) {
-        showToast('Erro na importação em lote', 'error');
+        showToast('Erro na importação', 'error');
       }
       btn.disabled = false;
     }
