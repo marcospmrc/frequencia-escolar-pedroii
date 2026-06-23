@@ -299,13 +299,14 @@
   <script>
     // Configurações do Firebase - IMPORTANTE: Insira seus dados reais abaixo!
     const firebaseConfig = {
-      apiKey: "AIzaSyDvhx0mZjsrQXrGenUHRdUuDRpo9KqDUPY",
-      authDomain: "ceti-pedro-ii.firebaseapp.com",
-      projectId: "ceti-pedro-ii",
-      storageBucket: "ceti-pedro-ii.appspot.com",
-      messagingSenderId: "INSIRA_SEU_SENDER_ID_AQUI",
-      appId: "INSIRA_SEU_APP_ID_AQUI"
-    };
+  apiKey: "AIzaSyDvhx0mZjsrQXrGenUHRdUuDRpo9KqDUPY",
+  authDomain: "ceti-pedro-ii.firebaseapp.com",
+  databaseURL: "https://ceti-pedro-ii-default-rtdb.firebaseio.com",
+  projectId: "ceti-pedro-ii",
+  storageBucket: "ceti-pedro-ii.firebasestorage.app",
+  messagingSenderId: "386044607882",
+  appId: "1:386044607882:web:46c8d0284a12526cc5dc73"
+};
 
     // Inicialização direta e segura (Sem imports)
     if (!firebase.apps.length) {
@@ -512,4 +513,177 @@
       const classStudents = allStudents.filter(s => s.class === selectedClass && s.status === 'ativo');
       if (classStudents.length === 0) {
         attendanceStudents.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum aluno ativo nesta turma</p>';
-        document.getElementById('attendance-actions').classList.add('
+        document.getElementById('attendance-actions').classList.add('hidden');
+        return;
+      }
+
+      attendanceStudents.innerHTML = classStudents.map(student => `
+        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
+          <input type="checkbox" class="attendance-checkbox w-4 h-4" data-student-id="${student.id}" data-student-name="${student.name}">
+          <label class="flex-1 cursor-pointer">
+            <p class="text-sm font-medium text-slate-800">${student.name}</p>
+            <p class="text-xs text-slate-500">${student.matricula}</p>
+          </label>
+        </div>
+      `).join('');
+      document.getElementById('attendance-actions').classList.remove('hidden');
+    }
+
+    async function saveAttendance() {
+      const date = document.getElementById('a-date').value;
+      const selectedClass = document.getElementById('a-class').value;
+      const discipline = document.getElementById('a-discipline').value.trim();
+      const teacher = document.getElementById('a-teacher').value.trim();
+
+      if (!date || !discipline || !teacher) {
+        showToast('Preencha data, disciplina e professor', 'error');
+        return;
+      }
+
+      const checkboxes = document.querySelectorAll('.attendance-checkbox');
+      const btn = document.getElementById('btn-save-attendance');
+      btn.disabled = true;
+
+      try {
+        const batch = db.batch();
+        checkboxes.forEach(checkbox => {
+          const studentId = checkbox.dataset.studentId;
+          const studentName = checkbox.dataset.studentName;
+          const isPresent = checkbox.checked;
+
+          const attRef = db.collection("attendance").doc();
+          batch.set(attRef, {
+            student_id: studentId,
+            student_name: studentName,
+            class: selectedClass,
+            date, discipline, teacher,
+            present: isPresent,
+            created_at: new Date().toISOString()
+          });
+        });
+
+        await batch.commit();
+        showToast('Frequências salvas com sucesso');
+        document.getElementById('attendance-students').innerHTML = '';
+        document.getElementById('attendance-actions').classList.add('hidden');
+      } catch (e) {
+        showToast('Erro ao salvar frequências', 'error');
+        console.error(e);
+      }
+      btn.disabled = false;
+    }
+
+    function generateReport() {
+      const reportType = document.getElementById('r-type').value;
+      const selectedClass = document.getElementById('r-class').value;
+      const container = document.getElementById('report-content');
+
+      if (reportType === 'class') {
+        const classStudents = allStudents.filter(s => !selectedClass || s.class === selectedClass);
+        if (classStudents.length === 0) {
+          container.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum registro encontrado</p>';
+          return;
+        }
+        container.innerHTML = classStudents.map(student => {
+          const totalAulas = allAttendance.filter(a => a.student_id === student.id).length;
+          const presencas = allAttendance.filter(a => a.student_id === student.id && a.present).length;
+          const percentage = totalAulas > 0 ? Math.round((presencas / totalAulas) * 100) : 100;
+
+          return `<div class="p-2 border-b flex justify-between">
+            <div><b>${student.name}</b><br><span class="text-xs text-slate-500">${student.class}</span></div>
+            <div class="text-right"><b>${percentage}%</b><br><span class="text-xs text-slate-500">${presencas}/${totalAulas} Presenças</span></div>
+          </div>`;
+        }).join('');
+      } else {
+        container.innerHTML = '<p class="text-slate-500 text-center py-8">Relatório renderizado.</p>';
+      }
+    }
+
+    function updateDashboard() {
+      document.getElementById('stat-students').textContent = allStudents.length;
+      document.getElementById('stat-attendance').textContent = allAttendance.length;
+
+      const activeStudents = allStudents.filter(s => s.status === 'ativo');
+      let lowFreqCount = 0;
+      let htmlLowFreq = '';
+
+      activeStudents.forEach(student => {
+        const total = allAttendance.filter(a => a.student_id === student.id).length;
+        const presencas = allAttendance.filter(a => a.student_id === student.id && a.present).length;
+        const percentage = total > 0 ? Math.round((presencas / total) * 100) : 100;
+
+        if (percentage < 75) {
+          lowFreqCount++;
+          htmlLowFreq += `<div class="p-2 bg-red-50 border border-red-200 rounded-lg flex justify-between">
+            <span class="font-medium text-red-900">${student.name}</span>
+            <span class="font-bold text-red-600">${percentage}%</span>
+          </div>`;
+        }
+      });
+
+      document.getElementById('stat-alerts').textContent = lowFreqCount;
+      document.getElementById('low-freq-list').innerHTML = htmlLowFreq || '<p class="text-slate-400 text-center py-4">Nenhum alerta</p>';
+    }
+
+    function showBulkImport() { document.getElementById('bulk-import-modal').classList.remove('hidden'); }
+    function closeBulkImport() { document.getElementById('bulk-import-modal').classList.add('hidden'); }
+
+    async function processBulkImport() {
+      const textarea = document.getElementById('bulk-textarea');
+      const lines = textarea.value.trim().split('\n').filter(line => line.trim());
+      if (lines.length === 0) return;
+
+      const btn = document.getElementById('bulk-submit-btn');
+      btn.disabled = true;
+
+      try {
+        const batch = db.batch();
+        lines.forEach(line => {
+          const parts = line.split('|').map(p => p.trim());
+          if (parts.length >= 6) {
+            const [name, matricula, birth_date, course, classValue, status] = parts;
+            const docRef = db.collection("students").doc();
+            batch.set(docRef, { name, matricula, birth_date, course, class: classValue, status, created_at: new Date().toISOString() });
+          }
+        });
+        await batch.commit();
+        showToast('Lista importada com sucesso!');
+        closeBulkImport();
+      } catch (e) {
+        showToast('Erro na importação', 'error');
+      }
+      btn.disabled = false;
+    }
+
+    async function executeMigration() {
+      const btn = document.getElementById('btn-migrate-confirm');
+      btn.disabled = true;
+      try {
+        const batch = db.batch();
+        allStudents.forEach(student => {
+          const nextClass = MIGRATION_MAP[student.class];
+          if (nextClass) {
+            const docRef = db.collection("students").doc(student.id);
+            batch.update(docRef, {
+              class: nextClass,
+              status: nextClass === 'egresso' ? 'egresso' : student.status
+            });
+          }
+        });
+        await batch.commit();
+        showToast('Migração concluída.');
+        document.getElementById('migration-confirm').classList.add('hidden');
+      } catch (e) {
+        showToast('Erro ao migrar', 'error');
+      }
+      btn.disabled = false;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      populateClassSelects();
+      initDatabaseListeners();
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
