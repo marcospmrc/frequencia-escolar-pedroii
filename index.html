@@ -26,6 +26,7 @@
 </head>
 <body class="h-full bg-slate-50">
   <div id="app" class="h-full flex flex-col overflow-auto w-full">
+    
     <header id="main-header" class="bg-gradient-to-r from-[#0f2942] to-[#1e3a5f] text-white px-6 py-4 shadow-lg">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
@@ -50,6 +51,7 @@
     </nav>
 
     <main class="flex-1 p-4 md:p-6 overflow-auto w-full">
+      
       <div id="view-dashboard" class="view fade-in">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
@@ -77,7 +79,7 @@
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
             <div class="flex items-center justify-between">
               <div>
-                <p class="text-xs text-slate-500 uppercase tracking-wide">Freq. Média</p>
+                <p class="text-xs text-slate-500 uppercase tracking-wide">Freq. Média Geral</p>
                 <p id="stat-avg" class="text-2xl font-bold text-slate-800 mt-1">0%</p>
               </div>
               <div class="w-10 h-10 bg-amber-50 rounded-lg flex items-center justify-center">
@@ -100,23 +102,23 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-800 mb-3">Turmas</h3>
+            <h3 class="font-semibold text-slate-800 mb-3">Matriz Curricular / Turmas</h3>
             <div class="space-y-2 text-sm" id="classes-list">
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>1° ano A – Controle Ambiental</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>1° ano A – Guia de Turismo</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>1° ano B – Guia de Turismo</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>2° ano A – Controle Ambiental</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>2° ano B – Controle Ambiental</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano A (Manhã) – Controle Ambiental</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano B (Manhã) – Controle Ambiental</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano A (Tarde) – Guia de Turismo</span><span class="text-slate-500">Integral</span></div>
-              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano B (Tarde) – Guia de Turismo</span><span class="text-slate-500">Integral</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>1° ano A – Controle Ambiental</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>1° ano A – Guia de Turismo</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>1° ano B – Guia de Turismo</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>2° ano A – Controle Ambiental</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>2° ano B – Controle Ambiental</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano A (Manhã) – Controle Ambiental</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano B (Manhã) – Controle Ambiental</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano A (Tarde) – Guia de Turismo</span><span class="text-slate-500 font-medium">Técnico</span></div>
+              <div class="flex justify-between p-2 bg-slate-50 rounded-lg"><span>3° ano B (Tarde) – Guia de Turismo</span><span class="text-slate-500 font-medium">Técnico</span></div>
             </div>
           </div>
           <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-100">
-            <h3 class="font-semibold text-slate-800 mb-3">Alunos com Baixa Frequência</h3>
+            <h3 class="font-semibold text-slate-800 mb-3">Evasão / Alerta de Baixa Frequência (&lt;75%)</h3>
             <div id="low-freq-list" class="space-y-2 text-sm">
-              <p class="text-slate-400 text-center py-4">Nenhum alerta no momento</p>
+              <p class="text-slate-400 text-center py-4">Nenhum alerta crítico ativo.</p>
             </div>
           </div>
         </div>
@@ -125,22 +127,20 @@
       <div id="bulk-import-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-96 overflow-y-auto">
           <div class="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
-            <h3 class="text-lg font-bold text-slate-800">Importar Lista de Alunos</h3>
+            <h3 class="text-lg font-bold text-slate-800">Importar Lista de Alunos em Lote</h3>
             <button onclick="closeBulkImport()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
           </div>
           <div class="p-6 space-y-4">
             <div class="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <p class="text-sm text-blue-900"><strong>Formato esperado:</strong></p>
-              <p class="text-xs text-blue-800 mt-1">Cada linha: Nome | Matrícula | Data Nascimento (YYYY-MM-DD) | Curso | Turma | Status</p>
-              <p class="text-xs text-blue-700 font-mono bg-white p-2 rounded mt-2">João Silva | MAT001 | 2006-05-15 | Controle Ambiental | 1° ano A – Controle Ambiental | ativo</p>
+              <p class="text-sm text-blue-900"><strong>Padrão de Entrada:</strong></p>
+              <p class="text-xs text-blue-800 mt-1">Nome | Matrícula | Nascimento (YYYY-MM-DD) | Curso | Turma | Status</p>
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-2" for="bulk-textarea">Cole a lista aqui:</label>
-              <textarea id="bulk-textarea" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none h-40 font-mono" placeholder="Nome | Matrícula | Data | Curso | Turma | Status"></textarea>
+              <textarea id="bulk-textarea" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none h-40 font-mono" placeholder="João Silva | MAT001 | 2006-05-15 | Controle Ambiental | 1° ano A – Controle Ambiental | ativo"></textarea>
             </div>
             <div class="flex gap-2">
               <button id="bulk-submit-btn" onclick="processBulkImport()" class="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center justify-center gap-2">
-                <span id="bulk-btn-text">Importar</span>
+                <span id="bulk-btn-text">Processar Carga</span>
                 <span id="bulk-spinner" class="hidden loading-spinner"></span>
               </button>
               <button onclick="closeBulkImport()" class="flex-1 bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-300 transition">Cancelar</button>
@@ -152,7 +152,7 @@
       <div id="view-students" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
           <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <h2 class="text-lg font-bold text-slate-800">Cadastro de Alunos</h2>
+            <h2 class="text-lg font-bold text-slate-800">Matrícula Escolar</h2>
             <div class="flex gap-2">
               <button onclick="showStudentForm()" class="bg-[#1e3a5f] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#0f2942] transition flex items-center gap-2"> <i data-lucide="plus" class="w-4 h-4"></i>Novo Aluno </button>
               <button onclick="showBulkImport()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition flex items-center gap-2"> <i data-lucide="upload" class="w-4 h-4"></i>Importar Lista </button>
@@ -174,18 +174,18 @@
                 <input id="s-birth" type="date" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-600 mb-1" for="s-course">Curso</label>
+                <label class="block text-xs font-medium text-slate-600 mb-1" for="s-course">Curso Técnico</label>
                 <select id="s-course" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
                   <option value="Controle Ambiental">Técnico em Controle Ambiental</option>
                   <option value="Guia de Turismo">Técnico em Guia de Turismo</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-600 mb-1" for="s-class">Turma</label>
+                <label class="block text-xs font-medium text-slate-600 mb-1" for="s-class">Turma Alocada</label>
                 <select id="s-class" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none"></select>
               </div>
               <div>
-                <label class="block text-xs font-medium text-slate-600 mb-1" for="s-status">Status</label>
+                <label class="block text-xs font-medium text-slate-600 mb-1" for="s-status">Status Cadastral</label>
                 <select id="s-status" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
                   <option value="ativo">Ativo</option>
                   <option value="egresso">Egresso</option>
@@ -195,7 +195,7 @@
             </div>
             <div class="flex gap-2 mt-4">
               <button onclick="saveStudent()" id="btn-save-student" class="bg-[#1e3a5f] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#0f2942] transition flex items-center gap-2">
-                <span id="btn-save-text">Salvar</span>
+                <span id="btn-save-text">Salvar Aluno</span>
                 <span id="btn-save-spinner" class="hidden loading-spinner"></span>
               </button>
               <button onclick="hideStudentForm()" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-300 transition">Cancelar</button>
@@ -208,31 +208,33 @@
 
       <div id="view-attendance" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-          <h2 class="text-lg font-bold text-slate-800 mb-4">Registro de Frequência</h2>
+          <h2 class="text-lg font-bold text-slate-800 mb-4">Pauta de Chamada Diária</h2>
           <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4 p-4 bg-slate-50 rounded-xl border">
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-date">Data</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-date">Data Letiva</label>
               <input id="a-date" type="date" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-class">Turma</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-class">Filtro por Turma</label>
               <select id="a-class" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none" onchange="loadClassStudents()"></select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-discipline">Disciplina</label>
-              <input id="a-discipline" type="text" placeholder="Ex: Biologia" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
+              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-discipline">Componente Curricular</label>
+              <input id="a-discipline" type="text" placeholder="Ex: Química / Biologia" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-teacher">Professor</label>
-              <input id="a-teacher" type="text" placeholder="Nome do professor" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
+              <label class="block text-xs font-medium text-slate-600 mb-1" for="a-teacher">Docente Responsável</label>
+              <input id="a-teacher" type="text" placeholder="Nome do Professor" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none">
             </div>
           </div>
+          
           <div id="attendance-students" class="space-y-2">
-            <p class="text-slate-400 text-center py-8">Selecione uma turma para registrar frequência</p>
+            <p class="text-slate-400 text-center py-8">Selecione uma turma para carregar a lista de chamadas.</p>
           </div>
+          
           <div id="attendance-actions" class="hidden mt-4">
             <button onclick="saveAttendance()" id="btn-save-attendance" class="bg-green-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition flex items-center gap-2">
-              <span id="attendance-text">Salvar Frequência</span>
+              <span id="attendance-text">Consolidar Frequências</span>
               <span id="attendance-spinner" class="hidden loading-spinner"></span>
             </button>
           </div>
@@ -241,63 +243,65 @@
 
       <div id="view-reports" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-          <h2 class="text-lg font-bold text-slate-800 mb-4">Relatórios de Frequência</h2>
+          <h2 class="text-lg font-bold text-slate-800 mb-4">Relatório e Estatísticas Secundárias</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1" for="r-type">Tipo de Relatório</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1" for="r-type">Agrupamento</label>
               <select id="r-type" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none" onchange="generateReport()">
-                <option value="class">Por Turma</option>
-                <option value="student">Por Aluno</option>
-                <option value="discipline">Por Disciplina</option>
+                <option value="class">Frequência por Turma/Curso</option>
+                <option value="student">Registros Totais por Aluno</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-slate-600 mb-1" for="r-class">Turma</label>
+              <label class="block text-xs font-medium text-slate-600 mb-1" for="r-class">Turma Específica</label>
               <select id="r-class" class="w-full border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-300 outline-none" onchange="generateReport()"></select>
             </div>
             <div class="flex items-end">
-              <button onclick="generateReport()" class="bg-[#1e3a5f] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#0f2942] transition w-full">Gerar Relatório</button>
+              <button onclick="generateReport()" class="bg-[#1e3a5f] text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-[#0f2942] transition w-full">Processar Filtros</button>
             </div>
           </div>
-          <div id="report-content" class="border rounded-xl p-4 min-h-[200px]">
-            <p class="text-slate-400 text-center py-8">Selecione os filtros e gere o relatório</p>
+          <div id="report-content" class="border rounded-xl p-4 min-h-[200px] bg-slate-50">
+            <p class="text-slate-400 text-center py-8">Defina os escopos acima para extração dos dados.</p>
           </div>
         </div>
       </div>
 
       <div id="view-migration" class="view hidden fade-in">
         <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-5">
-          <h2 class="text-lg font-bold text-slate-800 mb-4">Migração de Turmas</h2>
+          <h2 class="text-lg font-bold text-slate-800 mb-4">Virada de Ano Letivo & Progressão Automatizada</h2>
           <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4">
             <div class="flex items-start gap-3">
               <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 mt-0.5"></i>
               <div>
-                <p class="font-medium text-amber-800 text-sm">Atenção</p>
-                <p class="text-xs text-amber-700 mt-1">A migração moverá todos os alunos para o próximo ano letivo conforme as regras de progressão. Alunos do 3° ano serão marcados como egressos.</p>
+                <p class="font-medium text-amber-800 text-sm">Regra Automatizada de Migração:</p>
+                <p class="text-xs text-amber-700 mt-1">Alunos de 1º e 2º ano progridem para a série seguinte do respectivo curso técnico. <b>Alunos regularmente matriculados em qualquer vertente de 3º ano serão automaticamente alterados para a classe Destino: "Egresso" e seu Status modificado para desativado/egresso.</b></p>
               </div>
             </div>
           </div>
+          
           <div id="migration-confirm" class="hidden bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
-            <p class="text-sm text-red-800 font-medium">Tem certeza? Esta ação não pode ser desfeita.</p>
+            <p class="text-sm text-red-800 font-medium">Confirma a transição em lote de todas as matrículas ativas? Essa operação reescreve documentos em massa.</p>
             <div class="flex gap-2 mt-3">
               <button onclick="executeMigration()" id="btn-migrate-confirm" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition flex items-center gap-2">
-                <span id="migrate-text">Confirmar Migração</span>
+                <span id="migrate-text">Confirmar Execução de Carga</span>
                 <span id="migrate-spinner" class="hidden loading-spinner"></span>
               </button>
-              <button onclick="document.getElementById('migration-confirm').classList.add('hidden')" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium">Cancelar</button>
+              <button onclick="document.getElementById('migration-confirm').classList.add('hidden')" class="bg-slate-200 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium">Abortar</button>
             </div>
           </div>
+          
           <button onclick="document.getElementById('migration-confirm').classList.remove('hidden')" class="bg-amber-600 text-white px-5 py-2 rounded-lg text-sm font-medium hover:bg-amber-700 transition flex items-center gap-2">
-            <i data-lucide="arrow-right-circle" class="w-4 h-4"></i>Iniciar Migração Anual
+            <i data-lucide="arrow-right-circle" class="w-4 h-4"></i>Executar Migração Geral Automatizada
           </button>
         </div>
       </div>
     </main>
   </div>
+  
   <div id="toast-container"></div>
 
   <script>
-    // Configurações do Firebase - IMPORTANTE: Insira seus dados reais abaixo!
+    // Configurações Globais do Firebase Firestore
     const firebaseConfig = {
   apiKey: "AIzaSyDvhx0mZjsrQXrGenUHRdUuDRpo9KqDUPY",
   authDomain: "ceti-pedro-ii.firebaseapp.com",
@@ -308,7 +312,7 @@
   appId: "1:386044607882:web:46c8d0284a12526cc5dc73"
 };
 
-    // Inicialização direta e segura (Sem imports)
+    // Inicialização da instância unificada (Não gera quebra por duplicação)
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
@@ -326,6 +330,7 @@
       '3° ano B (Tarde) – Guia de Turismo'
     ];
 
+    // Mapeamento Estrito: 3º Anos apontam diretamente para a Classe Exclusiva de Egresso
     const MIGRATION_MAP = {
       '1° ano A – Controle Ambiental': '2° ano A – Controle Ambiental',
       '1° ano A – Guia de Turismo': '2° ano A – Guia de Turismo',
@@ -347,7 +352,7 @@
       selects.forEach(id => {
         const select = document.getElementById(id);
         if (select) {
-          select.innerHTML = id === 'r-class' ? '<option value="">Todas</option>' : '';
+          select.innerHTML = id === 'r-class' ? '<option value="">Todas as Turmas</option>' : '';
           CLASSES.forEach(c => {
             select.innerHTML += `<option value="${c}">${c}</option>`;
           });
@@ -363,7 +368,7 @@
         });
         updateDashboard();
         renderStudentList();
-      }, error => console.error("Erro alunos:", error));
+      }, error => console.error("Falha ao recuperar estudantes:", error));
 
       db.collection("attendance").onSnapshot((snapshot) => {
         allAttendance = [];
@@ -371,7 +376,7 @@
           allAttendance.push({ id: doc.id, ...doc.data() });
         });
         updateDashboard();
-      }, error => console.error("Erro frequências:", error));
+      }, error => console.error("Falha ao recuperar chamadas:", error));
     }
 
     function switchView(view) {
@@ -410,6 +415,12 @@
       document.getElementById('s-matricula').value = '';
       document.getElementById('s-birth').value = '';
       editingStudentId = null;
+      
+      // Liberação de concorrência visual dos botões
+      const btn = document.getElementById('btn-save-student');
+      btn.disabled = false;
+      document.getElementById('btn-save-text').classList.remove('hidden');
+      document.getElementById('btn-save-spinner').classList.add('hidden');
     }
 
     async function saveStudent() {
@@ -421,7 +432,7 @@
       const status = document.getElementById('s-status').value;
 
       if (!name || !matricula || !birth) {
-        showToast('Preencha todos os campos obrigatórios', 'error');
+        showToast('Preencha os campos estruturais obrigatórios.', 'error');
         return;
       }
 
@@ -438,35 +449,34 @@
       try {
         if (editingStudentId) {
           await db.collection("students").doc(editingStudentId).update(studentData);
-          showToast('Aluno updated com sucesso');
+          showToast('Registro de aluno atualizado com sucesso.');
         } else {
           studentData.created_at = new Date().toISOString();
           await db.collection("students").add(studentData);
-          showToast('Aluno cadastrado com sucesso');
+          showToast('Aluno inserido na matriz de dados.');
         }
         hideStudentForm();
       } catch (e) {
-        showToast('Erro ao salvar no banco', 'error');
+        showToast('Falha crítica na comunicação com Firestore.', 'error');
         console.error(e);
+        btn.disabled = false;
+        document.getElementById('btn-save-text').classList.remove('hidden');
+        document.getElementById('btn-save-spinner').classList.add('hidden');
       }
-
-      btn.disabled = false;
-      document.getElementById('btn-save-text').classList.remove('hidden');
-      document.getElementById('btn-save-spinner').classList.add('hidden');
     }
 
     function renderStudentList() {
       const list = document.getElementById('student-list');
       if (allStudents.length === 0) {
-        list.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum aluno cadastrado.</p>';
+        list.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum aluno localizado no sistema.</p>';
         return;
       }
 
       list.innerHTML = allStudents.map(student => `
-        <div class="bg-slate-50 p-3 rounded-lg flex items-center justify-between border border-slate-200 hover:border-slate-300 transition">
+        <div class="bg-slate-50 p-3 rounded-lg flex items-center justify-between border border-slate-200 hover:border-slate-300 transition fade-in">
           <div class="flex-1">
             <p class="font-medium text-slate-800">${student.name}</p>
-            <p class="text-xs text-slate-500">${student.matricula} • ${student.class} (${student.status})</p>
+            <p class="text-xs text-slate-500">${student.matricula} • ${student.class} • ${student.course} (${student.status})</p>
           </div>
           <div class="flex gap-2">
             <button onclick="editStudent('${student.id}')" class="text-blue-600 hover:text-blue-700 p-1"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
@@ -491,12 +501,12 @@
     }
 
     async function deleteStudent(id) {
-      if (!confirm('Tem certeza que deseja deletar este aluno?')) return;
+      if (!confirm('Esta ação removerá o aluno de todos os diários de classe. Confirmar?')) return;
       try {
         await db.collection("students").doc(id).delete();
-        showToast('Aluno removido');
+        showToast('Matrícula expurgada com sucesso.');
       } catch (e) {
-        showToast('Erro ao deletar', 'error');
+        showToast('Erro ao remover documento.', 'error');
       }
     }
 
@@ -505,25 +515,30 @@
       const attendanceStudents = document.getElementById('attendance-students');
 
       if (!selectedClass) {
-        attendanceStudents.innerHTML = '<p class="text-slate-400 text-center py-8">Selecione uma turma para registrar frequência</p>';
+        attendanceStudents.innerHTML = '<p class="text-slate-400 text-center py-8">Selecione uma turma para carregar a lista de chamadas.</p>';
         document.getElementById('attendance-actions').classList.add('hidden');
         return;
       }
 
       const classStudents = allStudents.filter(s => s.class === selectedClass && s.status === 'ativo');
       if (classStudents.length === 0) {
-        attendanceStudents.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum aluno ativo nesta turma</p>';
+        attendanceStudents.innerHTML = '<p class="text-slate-400 text-center py-8">Não existem alunos com status "Ativo" nesta lista.</p>';
         document.getElementById('attendance-actions').classList.add('hidden');
         return;
       }
 
-      attendanceStudents.innerHTML = classStudents.map(student => `
-        <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-lg border border-slate-200">
-          <input type="checkbox" class="attendance-checkbox w-4 h-4" data-student-id="${student.id}" data-student-name="${student.name}">
+      attendanceStudents.innerHTML = `
+        <div class="flex items-center justify-between p-2 bg-slate-200 rounded text-xs font-semibold text-slate-700 mb-1">
+          <span>Nome Completo / Identificação</span>
+          <span>Presença (Marque para Sim / Desmarque para Falta)</span>
+        </div>
+      ` + classStudents.map(student => `
+        <div class="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-200">
           <label class="flex-1 cursor-pointer">
             <p class="text-sm font-medium text-slate-800">${student.name}</p>
             <p class="text-xs text-slate-500">${student.matricula}</p>
           </label>
+          <input type="checkbox" checked class="attendance-checkbox w-5 h-5 accent-green-600" data-student-id="${student.id}" data-student-name="${student.name}">
         </div>
       `).join('');
       document.getElementById('attendance-actions').classList.remove('hidden');
@@ -536,7 +551,7 @@
       const teacher = document.getElementById('a-teacher').value.trim();
 
       if (!date || !discipline || !teacher) {
-        showToast('Preencha data, disciplina e professor', 'error');
+        showToast('Metadados da frequência incompletos.', 'error');
         return;
       }
 
@@ -563,11 +578,12 @@
         });
 
         await batch.commit();
-        showToast('Frequências salvas com sucesso');
-        document.getElementById('attendance-students').innerHTML = '';
+        showToast('Pauta assinada e arquivada.');
+        document.getElementById('attendance-students').innerHTML = '<p class="text-slate-400 text-center py-8">Selecione uma turma para carregar a lista de chamadas.</p>';
         document.getElementById('attendance-actions').classList.add('hidden');
+        document.getElementById('a-discipline').value = '';
       } catch (e) {
-        showToast('Erro ao salvar frequências', 'error');
+        showToast('Falha na persistência do lote eletrônico.', 'error');
         console.error(e);
       }
       btn.disabled = false;
@@ -581,21 +597,21 @@
       if (reportType === 'class') {
         const classStudents = allStudents.filter(s => !selectedClass || s.class === selectedClass);
         if (classStudents.length === 0) {
-          container.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum registro encontrado</p>';
+          container.innerHTML = '<p class="text-slate-400 text-center py-8">Nenhum registro encontrado para a turma informada.</p>';
           return;
         }
-        container.innerHTML = classStudents.map(student => {
+        container.innerHTML = `<div class="bg-white p-3 rounded-xl border space-y-2">` + classStudents.map(student => {
           const totalAulas = allAttendance.filter(a => a.student_id === student.id).length;
           const presencas = allAttendance.filter(a => a.student_id === student.id && a.present).length;
           const percentage = totalAulas > 0 ? Math.round((presencas / totalAulas) * 100) : 100;
 
-          return `<div class="p-2 border-b flex justify-between">
-            <div><b>${student.name}</b><br><span class="text-xs text-slate-500">${student.class}</span></div>
-            <div class="text-right"><b>${percentage}%</b><br><span class="text-xs text-slate-500">${presencas}/${totalAulas} Presenças</span></div>
+          return `<div class="p-2 border-b flex justify-between items-center text-sm">
+            <div><b>${student.name}</b><br><span class="text-xs text-slate-500">${student.class} • ${student.course}</span></div>
+            <div class="text-right"><span class="text-base font-bold ${percentage < 75 ? 'text-red-600' : 'text-green-600'}">${percentage}%</span><br><span class="text-xs text-slate-500">${presencas}/${totalAulas} Presenças</span></div>
           </div>`;
-        }).join('');
+        }).join('') + `</div>`;
       } else {
-        container.innerHTML = '<p class="text-slate-500 text-center py-8">Relatório renderizado.</p>';
+        container.innerHTML = `<div class="bg-white p-4 rounded-xl border text-sm text-slate-700"><b>Amostragem Bruta de Diários:</b> Total de ${allAttendance.length} lançamentos processados na base institucional.</div>`;
       }
     }
 
@@ -606,23 +622,28 @@
       const activeStudents = allStudents.filter(s => s.status === 'ativo');
       let lowFreqCount = 0;
       let htmlLowFreq = '';
+      let sumPercentages = 0;
 
       activeStudents.forEach(student => {
         const total = allAttendance.filter(a => a.student_id === student.id).length;
         const presencas = allAttendance.filter(a => a.student_id === student.id && a.present).length;
         const percentage = total > 0 ? Math.round((presencas / total) * 100) : 100;
 
+        sumPercentages += percentage;
+
         if (percentage < 75) {
           lowFreqCount++;
-          htmlLowFreq += `<div class="p-2 bg-red-50 border border-red-200 rounded-lg flex justify-between">
-            <span class="font-medium text-red-900">${student.name}</span>
+          htmlLowFreq += `<div class="p-2 bg-red-50 border border-red-200 rounded-lg flex justify-between items-center fade-in">
+            <span class="font-medium text-red-900">${student.name} (<span class="text-xs text-slate-500">${student.class}</span>)</span>
             <span class="font-bold text-red-600">${percentage}%</span>
           </div>`;
         }
       });
 
+      const globalAvg = activeStudents.length > 0 ? Math.round(sumPercentages / activeStudents.length) : 100;
+      document.getElementById('stat-avg').textContent = `${globalAvg}%`;
       document.getElementById('stat-alerts').textContent = lowFreqCount;
-      document.getElementById('low-freq-list').innerHTML = htmlLowFreq || '<p class="text-slate-400 text-center py-4">Nenhum alerta</p>';
+      document.getElementById('low-freq-list').innerHTML = htmlLowFreq || '<p class="text-slate-400 text-center py-4">Nenhum alerta crítico ativo.</p>';
     }
 
     function showBulkImport() { document.getElementById('bulk-import-modal').classList.remove('hidden'); }
@@ -635,6 +656,8 @@
 
       const btn = document.getElementById('bulk-submit-btn');
       btn.disabled = true;
+      document.getElementById('bulk-btn-text').classList.add('hidden');
+      document.getElementById('bulk-spinner').classList.remove('hidden');
 
       try {
         const batch = db.batch();
@@ -647,34 +670,56 @@
           }
         });
         await batch.commit();
-        showToast('Lista importada com sucesso!');
+        showToast('Importação concluída com sucesso.');
         closeBulkImport();
       } catch (e) {
-        showToast('Erro na importação', 'error');
+        showToast('Erro ao injetar registros de lote.', 'error');
       }
       btn.disabled = false;
+      document.getElementById('bulk-btn-text').classList.remove('hidden');
+      document.getElementById('bulk-spinner').classList.add('hidden');
     }
 
     async function executeMigration() {
       const btn = document.getElementById('btn-migrate-confirm');
       btn.disabled = true;
+      
       try {
         const batch = db.batch();
+        let count = 0;
+        
         allStudents.forEach(student => {
           const nextClass = MIGRATION_MAP[student.class];
           if (nextClass) {
             const docRef = db.collection("students").doc(student.id);
-            batch.update(docRef, {
-              class: nextClass,
-              status: nextClass === 'egresso' ? 'egresso' : student.status
-            });
+            
+            // SE a classe futura for 'egresso', muda dinamicamente o status do aluno para 'egresso'
+            if (nextClass === 'egresso') {
+              batch.update(docRef, {
+                class: 'Egresso Oficial',
+                status: 'egresso',
+                updated_at: new Date().toISOString()
+              });
+            } else {
+              batch.update(docRef, {
+                class: nextClass,
+                updated_at: new Date().toISOString()
+              });
+            }
+            count++;
           }
         });
-        await batch.commit();
-        showToast('Migração concluída.');
+        
+        if(count > 0) {
+          await batch.commit();
+          showToast(`Migração de ${count} alunos processada.`);
+        } else {
+          showToast('Nenhum aluno elegível localizado.', 'warning');
+        }
         document.getElementById('migration-confirm').classList.add('hidden');
       } catch (e) {
-        showToast('Erro ao migrar', 'error');
+        showToast('Falha na transição em massa.', 'error');
+        console.error(e);
       }
       btn.disabled = false;
     }
